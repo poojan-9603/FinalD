@@ -1,9 +1,7 @@
-/* src/pages/Dashboard.css */
-
 body {
-    background-color: #121212; /* Dark background */
-    color: #ffffff; /* Light text color */
-    font-family: Arial, sans-serif; /* Font style */
+    background-color: #121212; 
+    color: #ffffff; 
+    font-family: Arial, sans-serif; 
 }
 
 .dashboard-container {
@@ -19,7 +17,7 @@ body {
 .dashboard-title {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #bb86fc; /* Light purple color for title */
+    color: #bb86fc; 
 }
 
 .navbar {
@@ -37,22 +35,22 @@ body {
 
 .nav-title {
     font-size: 1.5rem;
-    color: #bb86fc; /* Light purple color */
+    color: #bb86fc; 
 }
 
 .value {
     font-size: 1.2rem;
-    color: #ffffff; /* Light text color */
+    color: #ffffff; 
 }
 
 .balance-title {
     font-size: 2rem;
     margin: 20px 0;
-    color: #bb86fc; /* Light purple color */
+    color: #bb86fc; 
 }
 
 .card {
-    background-color: #1e1e1e; /* Dark card background */
+    background-color: #1e1e1e; 
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -64,12 +62,12 @@ body {
 .card-title {
     font-size: 1.8rem;
     margin-bottom: 15px;
-    color: #bb86fc; /* Light purple color */
+    color: #bb86fc; 
 }
 
 .button {
     padding: 10px 20px;
-    background-color: #bb86fc; /* Light purple button */
+    background-color: #bb86fc; 
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -79,13 +77,13 @@ body {
 }
 
 .button:hover {
-    background-color: #3700b3; /* Darker purple on hover */
+    background-color: #3700b3; 
 }
 
 .login-button {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #d32f2f; /* Red color for back to login button */
+    background-color: #d32f2f; 
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -95,14 +93,13 @@ body {
 }
 
 .login-button:hover {
-    background-color: #b71c1c; /* Darker red on hover */
+    background-color: #b71c1c; 
 }
 
-/* Animation Styles */
 .animation-container {
     position: relative;
     width: 100%;
-    height: 200px; /* Adjust height as needed */
+    height: 200px; 
     overflow: hidden;
 }
 
@@ -117,24 +114,24 @@ body {
 .running-man {
     width: 50px;
     height: 100px;
-    background-color: #ffcc00; /* Yellow color for running man */
-    border-radius: 10px; /* Rounded corners */
+    background-color: #ffcc00; 
+    border-radius: 10px; 
     animation: run 2s linear infinite;
 }
 
 .bus {
     width: 80px;
     height: 50px;
-    background-color: #ff5722; /* Orange color for bus */
-    border-radius: 5px; /* Rounded corners */
+    background-color: #ff5722; 
+    border-radius: 5px; 
     animation: drive 3s linear infinite;
 }
 
 .cycle {
     width: 50px;
     height: 50px;
-    background-color: #4caf50; /* Green color for cycle */
-    border-radius: 50%; /* Circular shape */
+    background-color: #4caf50; 
+    border-radius: 50%; 
     animation: ride 2.5s linear infinite;
 }
 
@@ -154,18 +151,17 @@ body {
 }
 
 .fade-in {
-    animation: fadeIn 0.5s ease-in-out forwards; /* Animation for fade-in effect */
+    animation: fadeIn 0.5s ease-in-out forwards; 
 }
 
 @keyframes fadeIn {
     from {
-        opacity: 0; /* Start fully transparent */
+        opacity: 0; 
     }
     to {
-        opacity: 1; /* End fully opaque */
+        opacity: 1; 
     }
 }
-
 
 .header {
     display: flex;
@@ -177,7 +173,7 @@ body {
 
 .current-date {
     font-size: 1.2rem;
-    color: #ffffff; /* Light text color */
+    color: #ffffff; 
 }
 
 .streaks-button {
@@ -194,44 +190,38 @@ body {
     background-color: #9a67d9; 
 }
 
-/* Add this to your existing Dashboard.css */
-/* Fire-themed streak container */
-/* Fire-themed streak container */
-/* Fire-themed streak container */
-/* Fire-themed streak container */
 .streak-container {
     margin: 20px 0;
     padding: 20px;
-    background: linear-gradient(135deg, #ffcc00, #ff6600); /* Gradient from yellow to orange */
+    background: linear-gradient(135deg, #ffcc00, #ff6600); 
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(255, 102, 0, 0.5);
     text-align: center;
     position: relative;
-    overflow: hidden; /* To contain the fire animation */
-    min-height: 100px; /* Ensure a minimum height for the container */
+    overflow: hidden; 
+    min-height: 100px; 
 }
 
 .streak-title {
-    font-size: 1.8rem; /* Adjusted font size for better visibility */
-    color: #ffffff; /* White text color */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Shadow for better readability */
-    margin: 0; /* Remove default margin */
-    position: relative; /* Ensure it is above the fire animation */
-    z-index: 1; /* Bring the text above the fire animation */
+    font-size: 1.8rem; 
+    color: #ffffff; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+    margin: 0; 
+    position: relative; 
+    z-index: 1; 
 }
 
-/* Fire animation */
 .fire {
     position: absolute;
     bottom: 0;
     left: 50%;
     width: 100%;
     height: 100%;
-    background: url('https://media.giphy.com/media/3o7aD2sa1g0g0g0g0g/giphy.gif') no-repeat center; /* Fire animation GIF */
+    background: url('https://media.giphy.com/media/3o7aD2sa1g0g0g0g0g/giphy.gif') no-repeat center; 
     background-size: cover;
-    opacity: 0.3; /* Adjust opacity for a subtle effect */
-    animation: flicker 1.5s infinite alternate; /* Flicker effect */
-    z-index: 0; /* Ensure the fire is behind the text */
+    opacity: 0.3; 
+    animation: flicker 1.5s infinite alternate; 
+    z-index: 0; 
 }
 
 @keyframes flicker {
@@ -239,66 +229,63 @@ body {
     100% { opacity: 0.5; }
 }
 
-/* Dashboard.css */
-
 .dashboard-container {
     padding: 20px;
     position: relative;
-  }
+}
   
-  .header {
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
+}
   
-  .metrics {
+.metrics {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Align items to the right */
-  }
+    align-items: flex-end; 
+}
   
-  .metric-item {
-    background-color: #f0f0f0; /* Light background for metrics */
+.metric-item {
+    background-color: #f0f0f0; 
     border-radius: 8px;
     padding: 10px 15px;
     margin: 5px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
-  }
+}
   
-  .metric-item:hover {
-    transform: scale(1.05); /* Scale effect on hover */
-  }
+.metric-item:hover {
+    transform: scale(1.05); 
+}
   
-  .metric-item h3 {
+.metric-item h3 {
     margin: 0;
     font-size: 1.2em;
-    color: #333; /* Dark text color */
-  }
+    color: #333; 
+}
   
-  .logout-container {
-    display: flex; /* Use flexbox for centering */
-    justify-content: center; /* Center horizontally */
-    margin-top: 20px; /* Add some space above the button */
+.logout-container {
+    display: flex; 
+    justify-content: center; 
+    margin-top: 20px; 
 }
 
 .logout-button {
-    padding: 15px 30px; /* Increase padding for a larger button */
-    background-color: #bb86fc; /* Light purple background */
-    color: #fff; /* White text */
+    padding: 15px 30px; 
+    background-color: #bb86fc; 
+    color: #fff; 
     border: none;
-    border-radius: 8px; /* Rounded corners */
+    border-radius: 8px; 
     cursor: pointer;
-    font-size: 1.2rem; /* Increase font size */
-    font-weight: bold; /* Make the text bold */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and transform */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    font-size: 1.2rem; 
+    font-weight: bold; 
+    transition: background-color 0.3s, transform 0.2s; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 .logout-button:hover {
-    background-color: #3700b3; /* Darker purple on hover */
-    transform: scale(1.05); /* Slightly enlarge the button on hover */
+    background-color: #3700b3; 
+    transform: scale(1.05); 
 }
-  /* Other existing styles... */

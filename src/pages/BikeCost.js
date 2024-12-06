@@ -59,7 +59,6 @@ const BikeCost = () => {
     const userDocRef = doc(db, 'users', documentId);
 
     try {
-        // Use getDoc to check if the document exists
         const docSnapshot = await getDoc(userDocRef);
         if (!docSnapshot.exists()) {
             alert('No document found to update. Please check your user data.');
@@ -71,9 +70,9 @@ const BikeCost = () => {
             expenses: totalExpenses,
         });
         alert('Bike cost data saved successfully!');
-        navigate('/go-out'); // Redirect to GoOut after saving
+        navigate('/go-out'); 
     } catch (error) {
-        console.error('Error updating document:', error); // Log the error for debugging
+        console.error('Error updating document:', error); 
         alert('There was an error saving your bike cost data. Please try again.');
     }
 };
@@ -102,7 +101,7 @@ const BikeCost = () => {
               type="range"
               id="bikePrice"
               min="1"
-              max="5000" // Updated max range to 5000
+              max="5000" 
               value={bikePrice}
               onChange={(e) => setBikePrice(e.target.value)}
               className="slider"

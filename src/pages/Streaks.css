@@ -1,58 +1,55 @@
-/* Streaks.css */
-
 .streaks-container {
     padding: 20px;
-    background-color: #0b0808; /* Light background for the streaks section */
+    background-color: #0b0808; 
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
+}
   
-  .title {
+.title {
     font-size: 24px;
     margin-bottom: 10px;
-    color: #cbc9c9; /* Dark text color */
-  }
+    color: #cbc9c9; 
+}
   
-  .instructions {
+.instructions {
     font-size: 16px;
     margin-bottom: 20px;
-    color: #cbc9c9; /* Gray text color for instructions */
-  }
+    color: #cbc9c9; 
+}
   
-  .total-green-days {
+.total-green-days {
     font-size: 20px;
     margin-bottom: 20px;
-    color: #4caf50; /* Green color for total green days */
-  }
+    color: #4caf50; 
+}
   
-  .streaks-grid {
+.streaks-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
-    gap: 40px; /* Space between boxes */
-  }
+    grid-template-columns: repeat(7, 1fr); 
+    gap: 40px; 
+}
   
-  .streak-day {
+.streak-day {
     padding: 15px;
     text-align: center;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth transition for background color */
-    color: #fff; /* White text color */
-  }
+    transition: background-color 0.3s ease; 
+    color: #fff; 
+}
   
-  .streak-day.success {
-    background-color: #4caf50; /* Green for successful rides */
-  }
+.streak-day.success {
+    background-color: #4caf50; 
+}
   
-  .streak-day.failure {
-    background-color: #f44336; /* Red for unsuccessful rides */
-  }
+.streak-day.failure {
+    background-color: #f44336; 
+}
   
-  .streak-day:hover {
-    opacity: 0.8; /* Slightly fade on hover */
-  }
+.streak-day:hover {
+    opacity: 0.8; 
+}
   
-  /* Default gray color for other days */
-  .streak-day {
-    background-color: gray; /* Default gray for non-toggled days */
-  }
+.streak-day {
+    background-color: gray; 
+}

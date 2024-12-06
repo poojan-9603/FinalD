@@ -34,7 +34,7 @@ const Dashboard = () => {
           const category = userDoc.data().weatherPreference; 
           setUserCategory(category); 
           await updateDoc(userDoc.ref, {
-            userCategory: category || 'Cautious' 
+            userCategory: category || 'Cautious' // Default to 'Cautious' if not set
           });
         } else {
           alert('User document does not exist. Please complete your profile.');
@@ -54,7 +54,6 @@ const Dashboard = () => {
       navigate('/login'); 
     }
   }, [navigate]);
-  
   useEffect(() => {
     const calculateMetrics = async () => {
       const user = auth.currentUser;
@@ -84,6 +83,7 @@ const Dashboard = () => {
                 const updatedTotalDistance = totalDistance + newDistance; 
                 const updatedSavings = (userData.savings || 0) + newCost; 
 
+                // Check if the user document exists before updating
                 const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
                 const userSnapshot = await getDocs(userQuery); 
 
@@ -92,24 +92,25 @@ const Dashboard = () => {
                     await updateDoc(userDocRef, {
                         totalDistance: updatedTotalDistance,
                         savings: updatedSavings,
-                        lastUpdatedDate: today 
+                        lastUpdatedDate: today // Update last updated date
                     });
 
                     setTotalDistance(updatedTotalDistance);
                 } else {
+                    console.error('User document does not exist. Creating a new document.');
                     // Create a new user document if it does not exist
                     await setDoc(doc(db, 'users', user.uid), {
                         uid: user.uid,
                         totalDistance: updatedTotalDistance,
                         savings: updatedSavings,
                         lastUpdatedDate: today,
-                        routes: [] 
+                        routes: [] // Initialize routes if needed
                     });
                 }
             }
         }
     }
-  }, [userData, totalDistance]); 
+  }, [userData, totalDistance]); // Add necessary dependencies
 
   useEffect(() => {
     if (userData) {
@@ -130,8 +131,7 @@ const Dashboard = () => {
       return Math.ceil((totalExpenses - savings) / (2 * dailyRouteCost)); 
     }
     return 0; 
-  }, [totalExpenses, savings]); 
-  
+  }, [totalExpenses, savings]); // Add necessary dependencies
   useEffect(() => {
     if (userData) {
       const dailyRouteCost = userData.routes && userData.routes.length > 0 ? userData.routes[0].cost : 0; 
@@ -139,6 +139,7 @@ const Dashboard = () => {
       setRepaymentDays(days); 
     }
   }, [userData, totalExpenses, savings, calculateRepaymentDays]);  
+
 
  const checkWeather = useCallback(async (source) => {
     const user = auth.currentUser;
@@ -150,6 +151,7 @@ const Dashboard = () => {
             const weatherCondition = weather.condition.text || 'No condition available'; 
             setWeatherPrediction(weatherCondition); 
 
+            // Determine if the weather is favorable based on user category
             let isFavorable = false;
             const currentUserCategory = userCategory || 'Cautious'; 
 
@@ -166,21 +168,25 @@ const Dashboard = () => {
 
             setPredictionStatus(isFavorable ? 'favorable' : 'unfavorable'); 
 
+            // Update the goingOutPrediction in the database
             const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
             const userSnapshot = await getDocs(userQuery); 
 
             if (!userSnapshot.empty) {
                 const userDocRef = doc(db, 'users', userSnapshot.docs[0].id); 
                 await updateDoc(userDocRef, {
-                    lastWeatherUpdateDate: new Date().toLocaleDateString() 
+                    // goingOutPrediction: isFavorable
+                    lastWeatherUpdateDate: new Date().toLocaleDateString() // Update last weather update date
                 });
             }
         } catch (error) {
+            console.error('Error fetching weather data:', error); 
             setWeatherPrediction('Unable to fetch weather data.');
             setPredictionStatus('unknown'); 
         }
     }
-}, [userCategory]); 
+}, [userCategory]);// Add userCategory as a dependency/ Add userCategory as a dependency
+
   
   useEffect(() => {
     if (userData) {

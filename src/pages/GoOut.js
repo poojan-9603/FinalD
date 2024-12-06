@@ -8,15 +8,16 @@ import './GoOut.css';
 const GoOut = () => {
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
+  // const [error, setError] = useState('');
+
   const [cost, setCost] = useState(null);
   const [distance, setDistance] = useState(null);
-  const [error, setError] = useState('');
-  const [userData, setUserData] = useState(null);
+  // const [userData, setUserData] = useState(null);
+
   const [sourceSuggestions, setSourceSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [coords1, setCoords1] = useState(null);
   const [coords2, setCoords2] = useState(null);
-  const [dailyRoute, setDailyRoute] = useState(null); // State to hold daily route data
 
   const navigate = useNavigate();
 
@@ -28,9 +29,6 @@ const GoOut = () => {
           alert('User not authenticated.');
           return;
         }
-        console.log(error)
-        console.log(userData)
-
 
         const userId = user.uid;
         console.log('Current User ID:', userId); // Log the current user ID
@@ -40,14 +38,8 @@ const GoOut = () => {
         const userSnapshot = await getDocs(userQuery);
 
         if (!userSnapshot.empty) {
-          const userDoc = userSnapshot.docs[0]; // Get the first document
-          console.log('User Document Data:', userDoc.data()); // Log the user document data
-          setUserData(userDoc.data());
-
-          // Check if daily route exists and set it
-          if (userDoc.data().routes && userDoc.data().routes.length > 0) {
-            setDailyRoute(userDoc.data().routes[0]); // Assuming we want to show the first route
-          }
+          // const userDoc = userSnapshot.docs[0]; // Get the first document
+          // setUserData(userDoc.data());
         } else {
           alert('User document does not exist. Please complete your profile.');
           navigate('/first-time-login'); // Redirect to first-time login if document does not exist
@@ -59,15 +51,15 @@ const GoOut = () => {
     };
 
     fetchUserData();
-  }, [navigate,error,userData]);
+  }, [navigate]);
 
   const calculateDistance = async () => {
     if (!source || !destination) {
-      setError('Please enter both source and destination.');
+      // setError('Please enter both source and destination.');
       return;
     }
 
-    setError('');
+    // setError('');
 
     const sourceResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(source)}&format=json`);
     const sourceData = await sourceResponse.json();
@@ -76,7 +68,7 @@ const GoOut = () => {
     const destinationData = await destinationResponse.json();
 
     if (sourceData.length === 0 || destinationData.length === 0) {
-      setError('Could not find one or both locations.');
+      // setError('Could not find one or both locations.');
       return;
     }
 
@@ -151,9 +143,8 @@ const GoOut = () => {
     // Save the daily route in the existing user document
     await setDoc(doc(db, 'users', userDoc.id), { routes: [...(userDoc.data().routes || []), dailyRouteData] }, { merge: true });
 
-    // Update the totalDistance and savings in the user document
+    // Update the savings in the user document
     await updateDoc(doc(db, 'users', userDoc.id), {
-      totalDistance: (userDoc.data().totalDistance || 0) + distance, // Increment totalDistance
       savings: (userDoc.data().savings || 0) + cost // Increment savings by the cost of the route
     });
 
@@ -199,9 +190,6 @@ const GoOut = () => {
 
     console.log('Go Once Route Info:', routeInfo); // Log the route info to the console
     alert('Go Once action executed! Check console for details.');
-
-    // Redirect to the dashboard after "Go Once" action
-    navigate('/dashboard');
   };
 
   const fetchSuggestions = async (query, type) => {
@@ -284,16 +272,16 @@ const GoOut = () => {
       <h2 className="title">Daily Route</h2>
       <div className="favLocation">
         <div className="placeholder">
-          <strong>Daily Route Source:</strong> {dailyRoute ? dailyRoute.source : 'N/A'}
+          <strong>Daily Route Source:</strong> {source}
         </div>
         <div className="placeholder">
-          <strong>Daily Route Destination:</strong> {dailyRoute ? dailyRoute.destination : 'N/A'}
+          <strong>Daily Route Destination:</strong> {destination}
         </div>
         <div className="placeholder">
-          <strong>Daily Route Distance:</strong> {dailyRoute ? dailyRoute.distance.toFixed(2) : 'N/A'} km
+          <strong>Daily Route Distance:</strong> {distance ? distance.toFixed(2) : 'N/A'} km
         </div>
         <div className="placeholder">
-          <strong>Daily Route Cost:</strong> {dailyRoute ? `$${dailyRoute.cost.toFixed(2)}` : 'N/A'}
+          <strong>Daily Route Cost:</strong> {cost ? `$${cost.toFixed(2)}` : 'N/A'}
         </div>
       </div>
     </div>
