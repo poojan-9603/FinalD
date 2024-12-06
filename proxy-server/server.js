@@ -3,7 +3,7 @@ const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-const PORT = "https://friendly-bienenstitch-d03f3d.netlify.app/"";
+const PORT = 5001;
 
 // Enable CORS for your frontend
 app.use(cors());
