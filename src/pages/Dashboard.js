@@ -191,7 +191,7 @@ const Dashboard = () => {
     if (user) {
         try {
             // Use your proxy server instead of directly calling the weather API
-            const proxyApiUrl = `http://localhost:5001/weather?city=${source}`; // Replace with your deployed proxy server URL in production
+            const proxyApiUrl = `https://friendly-bienenstitch-d03f3d.netlify.app/weather?city=${source}`; // Replace with your deployed proxy server URL in production
             const response = await axios.get(proxyApiUrl);
             
             const weather = response.data.current; 

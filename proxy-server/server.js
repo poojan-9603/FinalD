@@ -3,7 +3,7 @@ const axios = require('axios');
 const cors = require('cors');
 
 const app = express();
-const PORT = 5001;
+const PORT = "https://friendly-bienenstitch-d03f3d.netlify.app/"";
 
 // Enable CORS for your frontend
 app.use(cors());
@@ -25,5 +25,5 @@ app.get('/weather', async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Proxy server running on http://localhost:${PORT}`);
+  console.log(`Proxy server running on https://friendly-bienenstitch-d03f3d.netlify.app/`);
 });
