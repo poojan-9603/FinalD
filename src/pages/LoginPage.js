@@ -22,26 +22,20 @@ const LoginPage = () => {
       if (!userSnapshot.empty) {
         const userData = userSnapshot.docs[0].data();
         
-        // Update the loggedIn status in Firestore
         await updateDoc(doc(db, "users", userSnapshot.docs[0].id), {
           firstTimeLogin: false,
-          loggedIn: true // Set loggedIn to true
+          loggedIn: true
         });
   
-        // Log the value of firstTimeLogin for debugging
-        console.log("firstTimeLogin value:", userData.firstTimeLogin);
-  
-        // Check if firstTimeLogin is false
         if (userData.firstTimeLogin === false) {
-          navigate('/dashboard'); // Redirect to dashboard if firstTimeLogin is false
+          navigate('/dashboard');
         } else {
-          navigate('/first-time-login'); // Redirect to first-time login if firstTimeLogin is true
+          navigate('/first-time-login');
         }
       } else {
         alert('User not found. Please check your credentials.');
       }
     } catch (error) {
-      console.error('Error: ', error);
       alert('Error: ' + error.message);
     }
   };

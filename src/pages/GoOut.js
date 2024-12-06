@@ -8,12 +8,8 @@ import './GoOut.css';
 const GoOut = () => {
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
-  // const [error, setError] = useState('');
-
   const [cost, setCost] = useState(null);
   const [distance, setDistance] = useState(null);
-  // const [userData, setUserData] = useState(null);
-
   const [sourceSuggestions, setSourceSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [coords1, setCoords1] = useState(null);
@@ -31,21 +27,14 @@ const GoOut = () => {
         }
 
         const userId = user.uid;
-        
-
-        
         const userQuery = query(collection(db, 'users'), where('uid', '==', userId));
         const userSnapshot = await getDocs(userQuery);
 
-        if (!userSnapshot.empty) {
-          // const userDoc = userSnapshot.docs[0]; // Get the first document
-          // setUserData(userDoc.data());
-        } else {
+        if (userSnapshot.empty) {
           alert('User document does not exist. Please complete your profile.');
           navigate('/first-time-login'); 
         }
       } catch (error) {
-        console.error('Error fetching user data: ', error);
         alert('There was an error fetching user data. Please try again.');
       }
     };
@@ -55,11 +44,8 @@ const GoOut = () => {
 
   const calculateDistance = async () => {
     if (!source || !destination) {
-      // setError('Please enter both source and destination.');
       return;
     }
-
-    // setError('');
 
     const sourceResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(source)}&format=json`);
     const sourceData = await sourceResponse.json();
@@ -68,7 +54,6 @@ const GoOut = () => {
     const destinationData = await destinationResponse.json();
 
     if (sourceData.length === 0 || destinationData.length === 0) {
-      // setError('Could not find one or both locations.');
       return;
     }
 
@@ -120,7 +105,6 @@ const GoOut = () => {
       return;
     }
 
-    // Query to find the user document based on uid
     const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
     const userSnapshot = await getDocs(userQuery);
 
@@ -129,7 +113,7 @@ const GoOut = () => {
       return;
     }
 
-    const userDoc = userSnapshot.docs[0]; // Get the first document
+    const userDoc = userSnapshot.docs[0];
 
     const dailyRouteData = {
       id: uuidv4(),
@@ -140,16 +124,10 @@ const GoOut = () => {
       location: coords1, 
     };
 
-    // Save the daily route in the existing user document
     await setDoc(doc(db, 'users', userDoc.id), { routes: [...(userDoc.data().routes || []), dailyRouteData] }, { merge: true });
 
-    // Update the savings in the user document
-    await updateDoc(doc(db, 'users', userDoc.id), {
-      savings: (userDoc.data().savings || 0) + cost // Increment savings by the cost of the route
-    });
-
     alert('Daily route saved!');
-    navigate('/dashboard', { state: { referenceId: dailyRouteData.id } }); // Ensure this is correct
+    navigate('/dashboard', { state: { referenceId: dailyRouteData.id } });
   };
 
   const goOnce = async () => {
@@ -164,7 +142,6 @@ const GoOut = () => {
       return;
     }
 
-    // Query to find the user document based on uid
     const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
     const userSnapshot = await getDocs(userQuery);
 
@@ -173,23 +150,14 @@ const GoOut = () => {
       return;
     }
 
-    const userDoc = userSnapshot.docs[0]; // Get the first document
+    const userDoc = userSnapshot.docs[0];
 
-    // Update the totalDistance and savings in the user document
     await updateDoc(doc(db, 'users', userDoc.id), {
-      totalDistance: (userDoc.data().totalDistance || 0) + distance, // Increment totalDistance
-      savings: (userDoc.data().savings || 0) + cost // Increment savings by the cost
+      totalDistance: (userDoc.data().totalDistance || 0) + distance,
+      savings: (userDoc.data().savings || 0) + cost
     });
 
-    const routeInfo = {
-      source,
-      destination,
-      distance,
-      cost,
-    };
-
-    console.log('Go Once Route Info:', routeInfo); // Log the route info to the console
-    alert('Go Once action executed! Check console for details.');
+    alert('added to the bag');
   };
 
   const fetchSuggestions = async (query, type) => {
@@ -267,7 +235,7 @@ const GoOut = () => {
         )}
         <button onClick={calculateDistance} className="doMathButton">Calculate</button>
         <button onClick={saveDailyRoute} className="doMathButton">Save Daily Route</button>
-        <button onClick={goOnce} className="doMathButton">Go Once</button> {/* New Go Once button */}
+        <button onClick={goOnce} className="doMathButton">Go Once</button>
       </div>
       <h2 className="title">Daily Route</h2>
       <div className="favLocation">

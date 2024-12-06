@@ -14,14 +14,13 @@ const BikeCost = () => {
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {
-      // setUserId(user.uid);
-      
       fetchUserDocument(user.uid);
     } else {
       alert('User not authenticated. Please log in.');
       navigate('/login');
     }
   }, [navigate]);
+
   const fetchUserDocument = async (userId) => {
     try {
       const userQuery = query(collection(db, "users"), where("uid", "==", userId));
@@ -30,8 +29,6 @@ const BikeCost = () => {
       if (!userSnapshot.empty) {
         const userDoc = userSnapshot.docs[0];
         setDocumentId(userDoc.id);
-      } else {
-        console.log('User document does not exist');
       }
     } catch (error) {
       alert('There was an error fetching user data. Please try again.');
@@ -70,7 +67,6 @@ const BikeCost = () => {
         alert('Bike cost data saved successfully!');
         navigate('/go-out'); 
     } catch (error) {
-        console.error('Error updating document:', error); 
         alert('There was an error saving your bike cost data. Please try again.');
     }
 };

@@ -43,14 +43,14 @@ const FirstTimeLogin = () => {
           userInfo,
           firstTimeLogin: true,
           loggedIn: false,
-          weatherPreference, // Store the user's classification
+          weatherPreference, 
         });
       } else {
         await updateDoc(doc(db, "users", userSnapshot.docs[0].id), {
           userInfo,
           firstTimeLogin: false,
           loggedIn: false,
-          weatherPreference, // Update the user's classification
+          weatherPreference, 
         });
       }
 

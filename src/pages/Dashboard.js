@@ -22,7 +22,7 @@ const Dashboard = () => {
   const referenceId = location.state?.referenceId; 
 
   const currentDate = new Date().toLocaleDateString(); 
-  const currentMonth = new Date().getMonth(); // Get the current month
+  const currentMonth = new Date().getMonth(); 
   const currentYear = new Date().getFullYear(); 
 
   useEffect(() => { 
@@ -36,7 +36,7 @@ const Dashboard = () => {
           const category = userDoc.data().weatherPreference; 
           setUserCategory(category); 
           await updateDoc(userDoc.ref, {
-            userCategory: category || 'Cautious' // Default to 'Cautious' if not set
+            userCategory: category || 'Cautious' 
           });
         } else {
           alert('User document does not exist. Please complete your profile.');
@@ -80,7 +80,6 @@ const Dashboard = () => {
       const lastUpdatedMonth = lastUpdatedDate.getMonth();
       const lastUpdatedYear = lastUpdatedDate.getFullYear();
 
-      // Check if the month has changed
       if (currentMonth !== lastUpdatedMonth || currentYear !== lastUpdatedYear) {
         const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
         const userSnapshot = await getDocs(userQuery);
@@ -90,16 +89,13 @@ const Dashboard = () => {
           const bikeCost = userDoc.data().bikeCost || {};
           const monthlyExpense = bikeCost.bikeExpensePerMonth || 0;
 
-          // Update total expenses
           const updatedTotalExpenses = (userData.totalExpenses || 0) + monthlyExpense;
 
-          // Update the user document with the new total expenses and last updated date
           await updateDoc(doc(db, 'users', userDoc.id), {
             totalExpenses: updatedTotalExpenses,
-            lastUpdatedDate: currentDate.toLocaleDateString() // Update last updated date
+            lastUpdatedDate: currentDate.toLocaleDateString() 
           });
 
-          // Update local state if needed
           setUserData(prevData => ({
             ...prevData,
             totalExpenses: updatedTotalExpenses,
@@ -108,12 +104,11 @@ const Dashboard = () => {
         }
       }
     }
-  }, [userData, currentMonth, currentYear, currentDate]); // Add necessary dependencies
+  }, [userData, currentMonth, currentYear, currentDate]);
 
   useEffect(() => {
     updateMonthlyExpenses();
   }, [updateMonthlyExpenses]);
-
 
   const updateDailyRouteData = useCallback(async () => {
     const user = auth.currentUser;
@@ -128,7 +123,6 @@ const Dashboard = () => {
                 const updatedTotalDistance = totalDistance + newDistance; 
                 const updatedSavings = (userData.savings || 0) + newCost; 
 
-                // Check if the user document exists before updating
                 const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
                 const userSnapshot = await getDocs(userQuery); 
 
@@ -137,25 +131,23 @@ const Dashboard = () => {
                     await updateDoc(userDocRef, {
                         totalDistance: updatedTotalDistance,
                         savings: updatedSavings,
-                        lastUpdatedDate: today // Update last updated date
+                        lastUpdatedDate: today 
                     });
 
                     setTotalDistance(updatedTotalDistance);
                 } else {
-                    console.error('User document does not exist. Creating a new document.');
-                    // Create a new user document if it does not exist
                     await setDoc(doc(db, 'users', user.uid), {
                         uid: user.uid,
                         totalDistance: updatedTotalDistance,
                         savings: updatedSavings,
                         lastUpdatedDate: today,
-                        routes: [] // Initialize routes if needed
+                        routes: [] 
                     });
                 }
             }
         }
     }
-  }, [userData, totalDistance]); // Add necessary dependencies
+  }, [userData, totalDistance]);
 
   useEffect(() => {
     if (userData) {
@@ -176,7 +168,7 @@ const Dashboard = () => {
       return Math.ceil((totalExpenses - savings) / (2 * dailyRouteCost)); 
     }
     return 0; 
-  }, [totalExpenses, savings]); // Add necessary dependencies
+  }, [totalExpenses, savings]);
 
   useEffect(() => {
     if (userData) {
@@ -190,15 +182,12 @@ const Dashboard = () => {
     const user = auth.currentUser;
     if (user) {
         try {
-            // Use your proxy server instead of directly calling the weather API
-            const proxyApiUrl = `https://server-54gi.onrender.com/weather?city=${source}`; // Replace with your deployed proxy server URL in production
+            const proxyApiUrl = `https://server-54gi.onrender.com/weather?city=${source}`; 
             const response = await axios.get(proxyApiUrl);
-            
             const weather = response.data.current; 
             const weatherCondition = weather.condition.text || 'No condition available'; 
             setWeatherPrediction(weatherCondition);
 
-            // Determine if the weather is favorable based on user category
             let isFavorable = false;
             const currentUserCategory = userCategory || 'Cautious';
 
@@ -215,7 +204,6 @@ const Dashboard = () => {
 
             setPredictionStatus(isFavorable ? 'favorable' : 'unfavorable');
 
-            // Update the goingOutPrediction in the database
             const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
             const userSnapshot = await getDocs(userQuery);
 
