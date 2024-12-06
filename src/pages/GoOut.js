@@ -31,9 +31,9 @@ const GoOut = () => {
         }
 
         const userId = user.uid;
-        console.log('Current User ID:', userId); // Log the current user ID
+        
 
-        // Query to find the user document based on uid
+        
         const userQuery = query(collection(db, 'users'), where('uid', '==', userId));
         const userSnapshot = await getDocs(userQuery);
 
@@ -42,7 +42,7 @@ const GoOut = () => {
           // setUserData(userDoc.data());
         } else {
           alert('User document does not exist. Please complete your profile.');
-          navigate('/first-time-login'); // Redirect to first-time login if document does not exist
+          navigate('/first-time-login'); 
         }
       } catch (error) {
         console.error('Error fetching user data: ', error);

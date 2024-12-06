@@ -110,8 +110,6 @@ const Streaks = ({ predictionStatus }) => {
                 streaks: existingStreaks,
             });
 
-            // const totalGreenDays = Object.values(updatedStreaks).filter(value => value === true).length; 
-
             setStreaks(updatedStreaks); 
         }
     }

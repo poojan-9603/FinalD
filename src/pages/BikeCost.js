@@ -8,14 +8,13 @@ const BikeCost = () => {
   const [bikePrice, setBikePrice] = useState(1);
   const [monthlyExpenses, setMonthlyExpenses] = useState(0);
   const [anonymousExpense, setAnonymousExpense] = useState('');
-  const [userId, setUserId] = useState(null);
   const [documentId, setDocumentId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {
-      setUserId(user.uid);
+      // setUserId(user.uid);
       
       fetchUserDocument(user.uid);
     } else {
@@ -23,7 +22,6 @@ const BikeCost = () => {
       navigate('/login');
     }
   }, [navigate]);
-  console.log(userId)
   const fetchUserDocument = async (userId) => {
     try {
       const userQuery = query(collection(db, "users"), where("uid", "==", userId));

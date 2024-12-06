@@ -22,8 +22,10 @@ const Dashboard = () => {
   const referenceId = location.state?.referenceId; 
 
   const currentDate = new Date().toLocaleDateString(); 
+  const currentMonth = new Date().getMonth(); // Get the current month
+  const currentYear = new Date().getFullYear(); 
 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchUserData = async (userId) => {
       try {
         const userQuery = query(collection(db, 'users'), where('uid', '==', userId));
@@ -34,7 +36,7 @@ const Dashboard = () => {
           const category = userDoc.data().weatherPreference; 
           setUserCategory(category); 
           await updateDoc(userDoc.ref, {
-            userCategory: category || 'Cautious' 
+            userCategory: category || 'Cautious' // Default to 'Cautious' if not set
           });
         } else {
           alert('User document does not exist. Please complete your profile.');
@@ -54,7 +56,7 @@ const Dashboard = () => {
       navigate('/login'); 
     }
   }, [navigate]);
-  
+
   useEffect(() => {
     const calculateMetrics = async () => {
       const user = auth.currentUser;
@@ -71,6 +73,48 @@ const Dashboard = () => {
     calculateMetrics();
   }, []);
 
+  const updateMonthlyExpenses = useCallback(async () => {
+    const user = auth.currentUser;
+    if (user && userData) {
+      const lastUpdatedDate = new Date(userData.lastUpdatedDate);
+      const lastUpdatedMonth = lastUpdatedDate.getMonth();
+      const lastUpdatedYear = lastUpdatedDate.getFullYear();
+
+      // Check if the month has changed
+      if (currentMonth !== lastUpdatedMonth || currentYear !== lastUpdatedYear) {
+        const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
+        const userSnapshot = await getDocs(userQuery);
+
+        if (!userSnapshot.empty) {
+          const userDoc = userSnapshot.docs[0];
+          const bikeCost = userDoc.data().bikeCost || {};
+          const monthlyExpense = bikeCost.bikeExpensePerMonth || 0;
+
+          // Update total expenses
+          const updatedTotalExpenses = (userData.totalExpenses || 0) + monthlyExpense;
+
+          // Update the user document with the new total expenses and last updated date
+          await updateDoc(doc(db, 'users', userDoc.id), {
+            totalExpenses: updatedTotalExpenses,
+            lastUpdatedDate: currentDate.toLocaleDateString() // Update last updated date
+          });
+
+          // Update local state if needed
+          setUserData(prevData => ({
+            ...prevData,
+            totalExpenses: updatedTotalExpenses,
+            lastUpdatedDate: currentDate.toLocaleDateString()
+          }));
+        }
+      }
+    }
+  }, [userData, currentMonth, currentYear, currentDate]); // Add necessary dependencies
+
+  useEffect(() => {
+    updateMonthlyExpenses();
+  }, [updateMonthlyExpenses]);
+
+
   const updateDailyRouteData = useCallback(async () => {
     const user = auth.currentUser;
     if (user && userData) {
@@ -84,6 +128,7 @@ const Dashboard = () => {
                 const updatedTotalDistance = totalDistance + newDistance; 
                 const updatedSavings = (userData.savings || 0) + newCost; 
 
+                // Check if the user document exists before updating
                 const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
                 const userSnapshot = await getDocs(userQuery); 
 
@@ -92,24 +137,25 @@ const Dashboard = () => {
                     await updateDoc(userDocRef, {
                         totalDistance: updatedTotalDistance,
                         savings: updatedSavings,
-                        lastUpdatedDate: today 
+                        lastUpdatedDate: today // Update last updated date
                     });
 
                     setTotalDistance(updatedTotalDistance);
                 } else {
+                    console.error('User document does not exist. Creating a new document.');
                     // Create a new user document if it does not exist
                     await setDoc(doc(db, 'users', user.uid), {
                         uid: user.uid,
                         totalDistance: updatedTotalDistance,
                         savings: updatedSavings,
                         lastUpdatedDate: today,
-                        routes: [] 
+                        routes: [] // Initialize routes if needed
                     });
                 }
             }
         }
     }
-  }, [userData, totalDistance]); 
+  }, [userData, totalDistance]); // Add necessary dependencies
 
   useEffect(() => {
     if (userData) {
@@ -130,8 +176,8 @@ const Dashboard = () => {
       return Math.ceil((totalExpenses - savings) / (2 * dailyRouteCost)); 
     }
     return 0; 
-  }, [totalExpenses, savings]); 
-  
+  }, [totalExpenses, savings]); // Add necessary dependencies
+
   useEffect(() => {
     if (userData) {
       const dailyRouteCost = userData.routes && userData.routes.length > 0 ? userData.routes[0].cost : 0; 
@@ -140,21 +186,24 @@ const Dashboard = () => {
     }
   }, [userData, totalExpenses, savings, calculateRepaymentDays]);  
 
- const checkWeather = useCallback(async (source) => {
+  const checkWeather = useCallback(async (source) => {
     const user = auth.currentUser;
     if (user) {
         try {
-            const apiUrl = `http://api.weatherapi.com/v1/current.json?key=4b82c9f291e9483490162102240412&q=${source}&aqi=no`;
-            const response = await axios.get(apiUrl);
+            // Use your proxy server instead of directly calling the weather API
+            const proxyApiUrl = `http://localhost:5001/weather?city=${source}`; // Replace with your deployed proxy server URL in production
+            const response = await axios.get(proxyApiUrl);
+            
             const weather = response.data.current; 
             const weatherCondition = weather.condition.text || 'No condition available'; 
-            setWeatherPrediction(weatherCondition); 
+            setWeatherPrediction(weatherCondition);
 
+            // Determine if the weather is favorable based on user category
             let isFavorable = false;
-            const currentUserCategory = userCategory || 'Cautious'; 
+            const currentUserCategory = userCategory || 'Cautious';
 
             if (currentUserCategory.trim() === 'Weather-Resilient') {
-                isFavorable = true; 
+                isFavorable = true;
             } else if (currentUserCategory.trim() === 'Cautious') {
                 isFavorable = !weatherCondition.toLowerCase().includes('rain') && 
                               !weatherCondition.toLowerCase().includes('storm');
@@ -164,23 +213,25 @@ const Dashboard = () => {
                               !weatherCondition.toLowerCase().includes('overcast');
             }
 
-            setPredictionStatus(isFavorable ? 'favorable' : 'unfavorable'); 
+            setPredictionStatus(isFavorable ? 'favorable' : 'unfavorable');
 
+            // Update the goingOutPrediction in the database
             const userQuery = query(collection(db, 'users'), where('uid', '==', user.uid));
-            const userSnapshot = await getDocs(userQuery); 
+            const userSnapshot = await getDocs(userQuery);
 
             if (!userSnapshot.empty) {
-                const userDocRef = doc(db, 'users', userSnapshot.docs[0].id); 
+                const userDocRef = doc(db, 'users', userSnapshot.docs[0].id);
                 await updateDoc(userDocRef, {
-                    lastWeatherUpdateDate: new Date().toLocaleDateString() 
+                    lastWeatherUpdateDate: new Date().toLocaleDateString()
                 });
             }
         } catch (error) {
+            console.error('Error fetching weather data:', error);
             setWeatherPrediction('Unable to fetch weather data.');
-            setPredictionStatus('unknown'); 
+            setPredictionStatus('unknown');
         }
     }
-}, [userCategory]); 
+  }, [userCategory]);
   
   useEffect(() => {
     if (userData) {
