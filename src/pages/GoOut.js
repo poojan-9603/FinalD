@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { setDoc, doc, getDoc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
+import { setDoc, doc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import './GoOut.css';
@@ -28,6 +28,9 @@ const GoOut = () => {
           alert('User not authenticated.');
           return;
         }
+        console.log(error)
+        console.log(userData)
+
 
         const userId = user.uid;
         console.log('Current User ID:', userId); // Log the current user ID
@@ -56,7 +59,7 @@ const GoOut = () => {
     };
 
     fetchUserData();
-  }, [navigate]);
+  }, [navigate,error,userData]);
 
   const calculateDistance = async () => {
     if (!source || !destination) {

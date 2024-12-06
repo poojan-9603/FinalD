@@ -15,6 +15,8 @@ const Streaks = ({ predictionStatus }) => {
     const userId = user.uid; 
     const userQuery = query(collection(db, 'users'), where('uid', '==', userId));
     const userSnapshot = await getDocs(userQuery);
+console.log(totalDistance)
+console.log(savings)
 
     if (!userSnapshot.empty) {
       const userDoc = userSnapshot.docs[0]; 
@@ -34,6 +36,8 @@ const Streaks = ({ predictionStatus }) => {
         const date = new Date(currentYear, currentMonth, day);
         if (date.getMonth() === currentMonth) {
           const isPastDate = date <= new Date();
+          console.log(isPastDate)
+
           const dateString = date.toISOString();
 
           // Set streaks based on existing streaks
@@ -55,7 +59,7 @@ const Streaks = ({ predictionStatus }) => {
         savings: newSavings 
       });
     }
-  }, []); 
+  }, [savings, totalDistance]); 
 
   useEffect(() => {
     initializeStreaks(); 

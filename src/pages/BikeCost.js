@@ -16,13 +16,14 @@ const BikeCost = () => {
     const user = auth.currentUser;
     if (user) {
       setUserId(user.uid);
+      
       fetchUserDocument(user.uid);
     } else {
       alert('User not authenticated. Please log in.');
       navigate('/login');
     }
   }, [navigate]);
-
+  console.log(userId)
   const fetchUserDocument = async (userId) => {
     try {
       const userQuery = query(collection(db, "users"), where("uid", "==", userId));
